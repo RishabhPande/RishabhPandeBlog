@@ -27,13 +27,23 @@ order: 1
                 <hr>
                 {% endfor %}
                 <!-- Pager -->
+                {% if paginator.total_pages > 1 %}
                 <ul class="pager">
-                    <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
+                    {% if paginator.previous_page %}
+                    <li class="previous">
+                        <a href="{{ paginator.previous_page_path }}">&larr; Prev Posts </a>
                     </li>
+                    {% endif %}   
+                    {% if paginator.next_page %}
+                     <li class="next">
+                        <a href="{{ paginator.next_page_path }}">Older Posts &rarr;</a>
+                    </li>
+                    {% endif %}
                 </ul>
+                {% endif %}
             </div>
         </div>
     </div>
+
 
     <hr>
