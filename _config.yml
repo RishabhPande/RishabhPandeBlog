@@ -1,2 +1,3 @@
 markdown: kramdown
 paginate: 2
+baseurl: "https://rishabhpande.github.io/RishabhPandeBlog/"
