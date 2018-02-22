@@ -6,7 +6,7 @@
     </li>
     {% else %}
     <li>
-          <a href="{{site.baseurl}}/{{node.url}}">{{node.navigationName}}</a>
+          <a href="{{site.baseurl}}{{node.url}}">{{node.navigationName}}</a>
           
     </li>
   {% endif %}
