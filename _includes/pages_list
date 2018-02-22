@@ -7,6 +7,9 @@
     {% else %}
     <li>
           <a href="{{node.url}}">{{node.navigationName}}</a>
+          <br />
+          {{site.baseurl}}<br />
+          {{node.url}}
     </li>
   {% endif %}
  {% endif %}
