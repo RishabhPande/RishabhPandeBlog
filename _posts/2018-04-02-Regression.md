@@ -168,13 +168,7 @@ sns.pairplot(dataset[['Precip Type', 'Temperature (C)', 'Apparent Temperature (C
 
 
 
-    <seaborn.axisgrid.PairGrid at 0x1a18d11978>
-
-
-
-
-![png](output_3_1.png)
-
+<img width="591" alt="screen shot 2018-04-18 at 9 27 43 pm" src="https://user-images.githubusercontent.com/34928106/38966314-a073b190-434f-11e8-964d-b99a16c06266.png">
 
 
 ```python
@@ -183,7 +177,8 @@ sns.heatmap(corr,  cmap="YlGnBu", square=True);
 ```
 
 
-![png](output_4_0.png)
+<img width="494" alt="screen shot 2018-04-18 at 9 31 51 pm" src="https://user-images.githubusercontent.com/34928106/38966374-f16bb7aa-434f-11e8-89b6-6c076c4f1140.png">
+
 
 
 
@@ -191,8 +186,7 @@ sns.heatmap(corr,  cmap="YlGnBu", square=True);
 sns.violinplot(x="Precip Type", y="Temperature (C)", data=dataset, palette="YlGnBu");
 ```
 
-
-![png](output_5_0.png)
+<img width="481" alt="screen shot 2018-04-18 at 9 32 39 pm" src="https://user-images.githubusercontent.com/34928106/38966396-0c558f8c-4350-11e8-8fa5-98298d8a8e15.png">
 
 
 
@@ -201,7 +195,8 @@ sns.violinplot(x="Precip Type", y="Humidity", data=dataset, palette="YlGnBu");
 ```
 
 
-![png](output_6_0.png)
+<img width="461" alt="screen shot 2018-04-18 at 9 33 17 pm" src="https://user-images.githubusercontent.com/34928106/38966415-23b010c6-4350-11e8-94a6-4db57c8e0458.png">
+
 
 
 With these plots we can choose two variables to study the relationship betweem them. In this study let's focus to explore Temperature as a function of Humidity, i.e., "how humidity influences in temperature?". The correlation plot gives us the information that they're strongly opposite related. 
