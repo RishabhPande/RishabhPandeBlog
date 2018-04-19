@@ -1,50 +1,27 @@
 ---
 layout: post
-title: "Weather in Szeged 2006-2016"
+title: "K-Nearest neighbor"
 description: "Kaggle project"
 author: "Rishabh Pande"
 coverImg: "post-bg.jpg"
 ---
 
-# Weather in Szeged 2006-2016
-### Hourly/daily summary with temperature, pressure, wind speed and more
-
-
 
 ### What is regression?
 
 
-Regression is one way of modeling the strength and direction of the relationship 
-between a dependent or output variable (usually represented by 'y') and one or more 
-independent or input variables (usually represented by 'x'). It differs from correlation 
-analysis because it allows you to predict the outcome for new input or inputs you haven’t 
-seen yet.
+Regression is one way of modeling the strength and direction of the relationship between a dependent or output variable (usually represented by 'y') and one or more independent or input variables (usually represented by 'x'). It differs from correlation analysis because it allows you to predict the outcome for new input or inputs you haven’t seen yet.
 
 
 What types of regression are there?
 
 
-There are many different types of regression. The specific family of regressions we’ll be 
-learning are called “generalized linear models”. The important thing for us to know is 
-that with this family of models, we need to pick a specific type of regression. The type 
-of regression will depend on what type of data we are trying to predict.
+There are many different types of regression. The specific family of regressions we’ll be learning are called “generalized linear models”. The important thing for us to know is that with this family of models, we need to pick a specific type of regression. The type of regression will depend on what type of data we are trying to predict.
+Linear: When you’re predicting a continuous value. (What temperature will it be today?) Logistic: When you’re predicting which category your observation is in. (Is this is a cat or a dog?)What is regression? Poisson: When you’re predicting a count value. (How many dogs will I see in the park?)
 
 
-Linear: When you’re predicting a continuous value. (What temperature will it be today?) 
-Logistic: When you’re predicting which category your observation is in. (Is this is a cat 
-or a dog?)What is regression? Poisson: When you’re predicting a count value. 
-(How many dogs will I see in the park?)
-
-
-Today, we’re going to practice picking the right model for our dataset and plotting it. 
-
-Let's pick up a dataset!
-
-
-We are going to use the szeged-weather dataset ("Historical weather around Szeged, 
-Hungary - from 2006 to 2016"), which contains timestamped records of weather features, 
-some numerical, some categorical. The Regression Challenge: Day 1 proposed us to take 1 
-variable as target Y and 1 variable as the feature X used to predict it.
+Today, we’re going to practice picking the right model for our dataset and plotting it. Let's pick up a dataset!
+We are going to use the szeged-weather dataset ("Historical weather around Szeged, Hungary - from 2006 to 2016"), which contains timestamped records of weather features, some numerical, some categorical. The Regression Challenge: Day 1 proposed us to take 1 variable as target Y and 1 variable as the feature X used to predict it.
 
 
 ```python
@@ -227,19 +204,12 @@ sns.violinplot(x="Precip Type", y="Humidity", data=dataset, palette="YlGnBu");
 ![png](output_6_0.png)
 
 
-With these plots we can choose two variables to study the relationship betweem them. In 
-this study let's focus to explore Temperature as a function of Humidity, i.e., 
-"how humidity influences in temperature?". The correlation plot gives us the information 
-that they're strongly opposite related. 
+With these plots we can choose two variables to study the relationship betweem them. In this study let's focus to explore Temperature as a function of Humidity, i.e., "how humidity influences in temperature?". The correlation plot gives us the information that they're strongly opposite related. 
 
-In our case, Temperature is a continuous value, so we choose the Linear Regression model 
-to tackle. If the predicted variable were Precip Type, we should use Logistic Regression, 
-but there isn't countable variables to apply Poisson on such configuration of data.
+In our case, Temperature is a continuous value, so we choose the Linear Regression model to tackle. If the predicted variable were Precip Type, we should use Logistic Regression, but there isn't countable variables to apply Poisson on such configuration of data.
 
 
-Looking for those violinplots before, I think if we apply a linear model to just one 
-category of Precip Type, the model may be more accurate, considering the noise from the 
-others patterns of humidity vs temperature.
+Looking for those violinplots before, I think if we apply a linear model to just one category of Precip Type, the model may be more accurate, considering the noise from the others patterns of humidity vs temperature.
 
 
 
@@ -251,19 +221,13 @@ sns.jointplot("Humidity", "Temperature (C)", data=dataset.where(dataset['Precip 
 ![png](output_8_0.png)
 
 
-The focus on linear regression, when you are predicting with a single feature, is to fit 
-the best line, minimizing the square error between all the samples. This line  Ŷ   is 
-defined as an estimative of the ground truth  Y :
+The focus on linear regression, when you are predicting with a single feature, is to fit the best line, minimizing the square error between all the samples. This line  Ŷ   is defined as an estimative of the ground truth  Y :
 
 Y=αX+β+ϵ
  
 Ŷ =α̂ X+β̂ 
  
-Where  X  is the set of samples,  α  is the inclination of the curve and  β  its 
-intercepts. The last parameter,  ϵ  is the one that our model can't explain. As we'll 
-see, our model  Ŷ   won't be 100% accurate and this  ϵ  is the model's residual, that 
-you should keep in mind for next diagnostics analysis on Day 2. Remeber that ^ stands 
-for an estimative.
+Where  X  is the set of samples,  α  is the inclination of the curve and  β  its intercepts. The last parameter,  ϵ  is the one that our model can't explain. As we'll see, our model  Ŷ   won't be 100% accurate and this  ϵ  is the model's residual, that you should keep in mind for next diagnostics analysis on Day 2. Remeber that ^ stands for an estimative.
 
 
 ```python
@@ -312,11 +276,7 @@ print("R2 = ",r2_score(y_test, y_pred))
     R2 =  0.564908684858
 
 
-Finally, we finished our regression. It means that now we have a relationship between 
-Humidity and Temperature, where we can predict how hot/cold would be, considering we have 
-measured the humity change. I think that was a good way to wake up the regression 
-instincts in your data heart! Next analysis will show you how to interpret if those fits 
-were good enough to trust in critical scenarios. Let's test it!
+Finally, we finished our regression. It means that now we have a relationship between Humidity and Temperature, where we can predict how hot/cold would be, considering we have measured the humity change. I think that was a good way to wake up the regression instincts in your data heart! Next analysis will show you how to interpret if those fits were good enough to trust in critical scenarios. Let's test it!
 
 
 ```python
