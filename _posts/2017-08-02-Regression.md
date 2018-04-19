@@ -227,8 +227,8 @@ sns.jointplot("Humidity", "Temperature (C)", data=dataset.where(dataset['Precip 
 
 ```
 
+<img width="462" alt="screen shot 2018-04-18 at 9 35 38 pm" src="https://user-images.githubusercontent.com/34928106/38966473-78f25468-4350-11e8-8acc-9bfc4d446fd0.png">
 
-![png](output_8_0.png)
 
 
 The focus on linear regression, when you are predicting with a single feature, is to fit the best line, minimizing the square error between all the samples. This line  Ŷ   is defined as an estimative of the ground truth  Y :
