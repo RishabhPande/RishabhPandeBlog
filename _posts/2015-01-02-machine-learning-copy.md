@@ -6,107 +6,143 @@ author: "Rishabh Pande"
 coverImg: "post-bg.jpg"
 ---
 
-# Random Forest
+# New York city taxi trip duration
 ### 1) Introduction
 
-For this project we will be exploring the use of tree methods to classify schools as Private or Public based off their features.Let's start by getting the data which is included in the ISLR library, [the College data frame](https://cran.r-project.org/web/packages/ISLR/ISLR.pdf).
+This is a comprehensive Exploratory Data Analysis for the New York City Taxi Trip Duration
+competition with tidy R and ggplot2.
+
+The goal of this playground challenge is to predict the duration of taxi rides in NYC 
+based on features like trip coordinates or pickup date and time. The data comes in the 
+shape of 1.5 million training observations and 630k test observation.
+Each row contains one taxi trip.
+
+In this project, we will first study and visualise the original data, engineer new 
+features, and examine potential outliers. Then we add two external data sets on the 
+NYC weather and on the theoretically fastest routes. We visualise and analyse the new 
+features within these data sets and their impact on the target trip_duration values. 
+Finally, we will make a brief excursion into viewing this challenge as a classification 
+problem and finish this notebook with a simple XGBoost model that provides a basic 
+prediction (final part under construction).
 
 ### 2) Load Libraries
 Let's start by installing the library
 
 ```
 
-install.packages('ISLR')
-install.packages ('ggplot2')
-install.packages ('caTools')
-install.packages('rpart')
-install.packages('rpart.plot')
+library('ggplot2') # visualisation
+library('scales') # visualisation
+library('grid') # visualisation
+library('RColorBrewer') # visualisation
+library('corrplot') # visualisation
+library('alluvial') # visualisation
+library('dplyr') # data manipulation
+library('readr') # input/output
+library('data.table') # data manipulation
+library('tibble') # data wrangling
+library('tidyr') # data wrangling
+library('stringr') # string manipulation
+library('forcats') # factor manipulation
+library('lubridate') # date and time
+library('geosphere') # geospatial locations
+library('leaflet') # maps
+library('leaflet.extras') # maps
+library('maps') # maps
+library('xgboost') # modelling
+library('caret') # modelling
 
 ```
+
+We will use R Cookbooks to create multi-panel plots
+
+
 ### 3) Read the data
 
-Let's check the head of College, which is a built in data frame with ISLR. 
-```
-
-library(ISLR)
-head(College)
+We use data.table’s fread function to speed up reading in the data:
 
 ```
-
-The data frame has 777 observations on the following 18 variables
-
-* **Private** - A factor with levels No and Yes indicating private or public university
-* **Apps** - Number of applications received
-* **Accept** - Number of applications accepted
-* **Enroll** - Number of new students enrolled
-* **Top10perc** - Pct. new students from top 10% of H.S. class
-* **Top25perc** - Pct. new students from top 25% of H.S. class
-* **F.Undergrad** - Number of fulltime undergraduates
-* **P.Undergrad** - Number of parttime undergraduates
-* **Outstate** - Out-of-state tuition
-* **Room.Board** - Room and board costs
-* **Books** - Estimated book costs
-* **Personal** - Estimated personal spending
-* **PhD** - Pct. of faculty with Ph.D.’s
-* **Terminal** - Pct. of faculty with terminal degree
-* **S.F.Ratio** - Student/faculty ratio
-* **perc.alumni** - Pct. alumni who donate
-* **Expend** - Instructional expenditure per student
-* **Grad.Rate** - Graduation rate
-
-### 4) Explore the data
-
+train <- as.tibble(fread('../input/nyc-taxi-trip-duration/train.csv'))
+test <- as.tibble(fread('../input/nyc-taxi-trip-duration/test.csv'))
+sample_submit <- as.tibble(fread('../input/nyc-taxi-trip-duration/sample_submission.csv'))
 ```
 
-library(ggplot2)
-ggplot(df,aes(Room.Board,Grad.Rate)) + geom_point(aes(color=Private))
+Let’s have an overview of the data sets using the summary and glimpse tools
 
 ```
-
-<img width="925" alt="screen shot 2018-01-22 at 9 59 03 pm" src="https://user-images.githubusercontent.com/34928106/35257626-6589fc76-ffc8-11e7-8e62-48940daca7b6.png">
-
-Let's create a histogram of full time undergrad students
+summary(train)
+glimpse(train)
 ```
 
-ggplot(df,aes(F.Undergrad)) + geom_histogram(aes(fill=Private),color='black',bins=50)
+We find:
+
+vendor_id only takes the values 1 or 2, presumably to differentiate two taxi companies
+
+pickup_datetime and (in the training set) dropoff_datetime are combinations of date and 
+time that we will have to re-format into a more useful shape
+
+passenger_count takes a median of 1 and a maximum of 9 in both data sets
+
+The pickup/dropoff_longitute/latitute describes the geographical coordinates where the 
+meter was activate/deactivated.
+
+store_and_fwd_flag is a flag that indicates whether the trip data was sent immediately 
+to the vendor (“N”) or held in the memory of the taxi because there was no connection to 
+the server (“Y”). Maybe there could be a correlation with certain geographical areas with 
+bad reception?
+
+trip_duration: our target feature in the training data is measured in seconds.
+
+### 5) Missing values
+
+Knowing about missing values is important because they indicate how much we don’t know 
+about our data. Making inferences based on just a few cases is often unwise. In addition,
+many modelling procedures break down when missing values are involved and the 
+corresponding rows will either have to be removed completely or the values need to be 
+estimated somehow.
+
+Here, we are in the fortunate position that our data is complete and there are no 
+missing values:
 
 ```
-<img width="924" alt="screen shot 2018-01-22 at 11 09 07 pm" src="https://user-images.githubusercontent.com/34928106/35257781-5703ff52-ffc9-11e7-8e5d-1803aca6a479.png">
+sum(is.na(train))
+## [1] 0
 
 
-Now let's create a histogram of Grad.Rate colored by Private
+sum(is.na(test))
+## [1] 0
 ```
+### 6) Combining train and test
 
-ggplot(df,aes(Grad.Rate)) + geom_histogram(aes(fill=Private),color='black',bins=50)
-
-```
-<img width="928" alt="screen shot 2018-01-22 at 11 12 24 pm" src="https://user-images.githubusercontent.com/34928106/35257851-c3ed5f96-ffc9-11e7-8406-8ac49acfa209.png">
-
-It's interesting to note that there's a college with a grad rate more than 100%. Let's find out which and update the value to 100
-```
-
-subset(df,Grad.Rate > 100)
+In preparation for our eventual modelling analysis we combine the train and test data 
+sets into a single one. I find it generally best not to examine the test data too 
+closely, since this bears the risk of overfitting your analysis to this data. However, 
+a few simple consistency checks between the two data sets can be of advantage.
 
 ```
-
-
-```
-df['Cazenovia College','Grad.Rate'] <- 100
-```
-
-### 5) Train & Test data
-
-Before we apply machine learning algorithms, we will need to split the data into training and testing sets. This enables to train an algorithm using the training data set and evaluate its accuracy on the test data set. An unrealistically low error value can arise due to overfitting if an algorithm is trained on the training data and evaluated for performance on the same data.
-
+combine <- bind_rows(train %>% mutate(dset = "train"), 
+                     test %>% mutate(dset = "test",
+                                     dropoff_datetime = NA,
+                                     trip_duration = NA))
+combine <- combine %>% mutate(dset = factor(dset))
 ```
 
-library(caTools)
-set.seed(101) 
-sample = sample.split(df$Private, SplitRatio = .70)
-train = subset(df, sample == TRUE)
-test = subset(df, sample == FALSE)
+### 7) Reformating features
+
+For our following analysis, we will turn the data and time from characters into date 
+objects. We also recode vendor_id as a factor. This makes it easier to visualise 
+relationships that involve these features.
 
 ```
-### 6) Decision Tree
+train <- train %>%
+  mutate(pickup_datetime = ymd_hms(pickup_datetime),
+         dropoff_datetime = ymd_hms(dropoff_datetime),
+         vendor_id = factor(vendor_id),
+         passenger_count = factor(passenger_count))
+```
 
-We will create the model using rpart library to build a decision tree to predict whether or not a school is Private. 
+
+
+
+
+
+
