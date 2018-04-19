@@ -21,7 +21,7 @@ Linear: When you’re predicting a continuous value. (What temperature will it b
 
 
 Today, we’re going to practice picking the right model for our dataset and plotting it. Let's pick up a dataset!
-We are going to use the szeged-weather dataset ("Historical weather around Szeged, Hungary - from 2006 to 2016") from [Kaggle] (https://www.kaggle.com/rtatman/datasets-for-regression-analysis), which contains timestamped records of weather features, some numerical, some categorical. The Regression Challenge: Day 1 proposed us to take 1 variable as target Y and 1 variable as the feature X used to predict it.
+We are going to use the szeged-weather dataset ("Historical weather around Szeged, Hungary - from 2006 to 2016") from [Kaggle](https://www.kaggle.com/rtatman/datasets-for-regression-analysis), which contains timestamped records of weather features, some numerical, some categorical. The Regression Challenge: Day 1 proposed us to take 1 variable as target Y and 1 variable as the feature X used to predict it.
 
 
 ```python
