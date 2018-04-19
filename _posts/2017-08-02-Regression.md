@@ -244,30 +244,12 @@ Where  X  is the set of samples,  α  is the inclination of the curve and  β  i
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
-
-
 ls = linear_model.LinearRegression()
-```
-
-
-```python
 data = dataset.where(dataset['Precip Type']=='null')
 data.dropna(inplace=True)
-```
-
-
-```python
 X = data["Humidity"].values.reshape(-1,1)
 y = data["Temperature (C)"].values.reshape(-1,1)
-```
-
-
-```python
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, shuffle=True)
-```
-
-
-```python
 ls.fit(X_train, y_train)
 print("alpha = ",ls.coef_[0])
 print("beta = ",ls.intercept_)
