@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "K-Nearest neighbor"
-description: "Kaggle project"
+title: "Weather in Szeged 2006-2016"
+description: "Regression Analysis"
 author: "Rishabh Pande"
 coverImg: "post-bg.jpg"
 ---
