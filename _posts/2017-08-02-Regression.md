@@ -161,8 +161,13 @@ dataset.head()
 
 
 
+
+
 ```python
+
+
 sns.pairplot(dataset[['Precip Type', 'Temperature (C)', 'Apparent Temperature (C)', 'Humidity']])
+
 ```
 
 
@@ -172,8 +177,10 @@ sns.pairplot(dataset[['Precip Type', 'Temperature (C)', 'Apparent Temperature (C
 
 
 ```python
+
 corr = dataset.drop('Loud Cover', axis=1).corr() # dropping Loud Cover because it never change
 sns.heatmap(corr,  cmap="YlGnBu", square=True);
+
 ```
 
 
@@ -183,7 +190,9 @@ sns.heatmap(corr,  cmap="YlGnBu", square=True);
 
 
 ```python
+
 sns.violinplot(x="Precip Type", y="Temperature (C)", data=dataset, palette="YlGnBu");
+
 ```
 
 <img width="481" alt="screen shot 2018-04-18 at 9 32 39 pm" src="https://user-images.githubusercontent.com/34928106/38966396-0c558f8c-4350-11e8-8fa5-98298d8a8e15.png">
@@ -191,7 +200,9 @@ sns.violinplot(x="Precip Type", y="Temperature (C)", data=dataset, palette="YlGn
 
 
 ```python
+
 sns.violinplot(x="Precip Type", y="Humidity", data=dataset, palette="YlGnBu");
+
 ```
 
 
@@ -209,7 +220,9 @@ Looking for those violinplots before, I think if we apply a linear model to just
 
 
 ```python
+
 sns.jointplot("Humidity", "Temperature (C)", data=dataset.where(dataset['Precip Type']=='null'), kind="hex");
+
 ```
 
 
