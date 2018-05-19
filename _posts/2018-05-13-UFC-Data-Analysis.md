@@ -16,7 +16,7 @@ Mixed martial arts (MMA) is a full-contact combat sport that allows striking and
 
 **Overview**
 
-Our dataset contains list of all UFC fights since 2013 with summed up entries of each fighter's round by round record preceding that fight. Each row represents a single fight - with each fighter's previous records summed up prior to the fight. Blank stats mean its the fighter's first fight since 2013 which is where granular data for UFC fights begins. Source of the data is Kaggle (https://www.kaggle.com/calmdownkarm/ufcdataset)
+Our dataset contains list of all UFC fights since 2013 with summed up entries of each fighter's round by round record preceding that fight. Each row represents a single fight - with each fighter's previous records summed up prior to the fight. Blank stats mean its the fighter's first fight since 2013 which is where granular data for UFC fights begins. Source of the data is [Kaggle](https://www.kaggle.com/calmdownkarm/ufcdataset)
 
 
 *Few things we will try to visualize:*
